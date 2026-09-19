@@ -28,16 +28,13 @@ print("harga barang 4      : Rp", barang_4)
 print("harga barang 5      : Rp", barang_5)
 print("harga barang 6      : Rp", barang_6)
 print("Daftar harga barang :", barang)
-
 print("Total belanjaan     : Rp", total_belanja)
 print("Pajak (15%)         : Rp", pajak)
 print("Total bayar         : Rp", total_bayar)
-
 print("Rata-rata harga     : Rp", rata_rata)
 print("NIM                 : ", nim)
 print("Boolean             : ", boolean)
 print("Apakah NIM lebih kecil dari rata-rata harga?", boolean)
-
 print("Kurs USD                      : Rp", kurs_usd)
 print("Kurs RUB                      : Rp", kurs_rub)
 print("Total bayar dalam USD         : $", total_bayar_usd)
