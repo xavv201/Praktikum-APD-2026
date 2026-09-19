@@ -11,7 +11,6 @@ pajak = total_belanja * 0.15
 total_bayar = total_belanja + pajak
 
 rata_rata = total_bayar / len(barang)
-
 nim = 8
 boolean = nim < rata_rata
 
@@ -22,18 +21,25 @@ total_bayar_rub = total_bayar / kurs_rub
 
 slicing_barang = barang[0:5:2]
 
-print("harga barang 1: Rp", barang_1)
-print("harga barang 2: Rp", barang_2)
-print("harga barang 3: Rp", barang_3)
-print("harga barang 4: Rp", barang_4)
-print("harga barang 5: Rp", barang_5)
-print("harga barang 6: Rp", barang_6)
-print("Daftar harga barang:", barang)
-print("Total belanjaan: Rp", total_belanja)
-print("Pajak (15%): Rp", pajak)
-print("Total bayar: Rp", total_bayar)
-print("Rata-rata harga: Rp", rata_rata)
+print("harga barang 1      : Rp", barang_1)
+print("harga barang 2      : Rp", barang_2)
+print("harga barang 3      : Rp", barang_3)
+print("harga barang 4      : Rp", barang_4)
+print("harga barang 5      : Rp", barang_5)
+print("harga barang 6      : Rp", barang_6)
+print("Daftar harga barang :", barang)
+
+print("Total belanjaan     : Rp", total_belanja)
+print("Pajak (15%)         : Rp", pajak)
+print("Total bayar         : Rp", total_bayar)
+
+print("Rata-rata harga     : Rp", rata_rata)
+print("NIM                 : ", nim)
+print("Boolean             : ", boolean)
 print("Apakah NIM lebih kecil dari rata-rata harga?", boolean)
-print("Total bayar dalam USD: $", total_bayar_usd)
-print("Total bayar dalam RUB: ₽", total_bayar_rub)
-print("List Slicing (barang 1, 3, 5):", slicing_barang)
+
+print("Kurs USD                      : Rp", kurs_usd)
+print("Kurs RUB                      : Rp", kurs_rub)
+print("Total bayar dalam USD         : $", total_bayar_usd)
+print("Total bayar dalam RUB         : ₽", total_bayar_rub)
+print("List Slicing (barang 1, 3, 5) :", slicing_barang)
