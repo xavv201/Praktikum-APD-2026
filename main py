@@ -1,0 +1,17 @@
+angka = int(input("Masukkan Angka: "))
+
+if angka < 100:
+    print(f"{angka} lebih kecil dari 100")
+else:
+    print(f"{angka} lebih dari 100")
+
+kendaraan = input("Masukkan jenis kendaraan anda: ")
+if kendaraan == "mobil":
+    tarif_parkir = 10000
+    if kendaraan == "Sepeda":
+        tarif_parkir = 2000
+        elif kendaraan == "motor":
+    tarif_parkir = 5000
+else:
+    tarif_parkir = 15000
+print("Tarif parkir yang harus dibayar:", tarif_parkir)
