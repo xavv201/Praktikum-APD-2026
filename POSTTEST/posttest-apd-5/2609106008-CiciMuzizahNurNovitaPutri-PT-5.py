@@ -1,14 +1,16 @@
 import os
 
-akun = [
-    ["admin", "admin123", "admin"],
-    ["xavv", "xavv201", "user"]
-]
+akun = {
+    "admin": {"password": "admin123", "role": "admin"},
+    "xavv": {"password": "xavv201", "role": "user"}
+}
 
-data_tidur = [
-    ["xavv", "10-10-2026", "23:00", "05:00", 4],
-    ["xavv", "11-10-2026", "02:30", "05:49", 3]
-]
+data_tidur = {
+    1: {"pemilik": "xavv", "tanggal": "10-10-2026", "tidur": "23:00", "bangun": "05:00", "kualitas": 4},
+    2: {"pemilik": "xavv", "tanggal": "11-10-2026", "tidur": "02:30", "bangun": "05:49", "kualitas": 3}
+}
+
+id_berikut = 3
 
 while True:
     os.system("cls" if os.name == "nt" else "clear")
@@ -28,7 +30,7 @@ while True:
 
         ada = False
         for a in akun:
-            if a[0] == username:
+            if a == username:
                 ada = True
 
         if username == "" or " " in username or len(username) < 3:
@@ -38,7 +40,7 @@ while True:
         elif len(password) < 4:
             print("Password minimal 4 karakter!")
         else:
-            akun.append([username, password, "user"])
+            akun[username] = {"password": password, "role": "user"}
             print("Register berhasil! Silakan login kembali.")
 
         input("Tekan Enter untuk lanjut.")
@@ -49,7 +51,7 @@ while True:
 
         login = None
         for a in akun:
-            if a[0] == username and a[1] == password:
+            if a == username and akun[a]["password"] == password:
                 login = a
 
         if login is None:
@@ -57,15 +59,17 @@ while True:
             input("Tekan Enter untuk lanjut.")
             continue
 
+        role = akun[login]["role"]
+
         while True:
             os.system("cls" if os.name == "nt" else "clear")
-            print("=== MENU", login[0], "-", login[2], "===")
+            print("=== MENU", login, "-", role, "===")
             print("1. Tambah data tidur")
             print("2. Lihat riwayat tidur")
             print("3. Ubah data tidur")
             print("4. Hapus data tidur")
 
-            if login[2] == "admin":
+            if role == "admin":
                 print("5. Lihat daftar akun")
 
             print("0. Logout")
@@ -124,10 +128,14 @@ while True:
                 kualitas = input("Kualitas tidur (1-5): ")
 
                 if kualitas.isdigit() and 1 <= int(kualitas) <= 5: # memeriksa apakah kualitas tidur berupa angka dan berada dalam rentang 1 - 5
-                    data_tidur.append([
-                        login[0], tanggal, waktu[0],
-                        waktu[1], int(kualitas)
-                    ])
+                    data_tidur[id_berikut] = {
+                        "pemilik": login,
+                        "tanggal": tanggal,
+                        "tidur": waktu[0],
+                        "bangun": waktu[1],
+                        "kualitas": int(kualitas)
+                    }
+                    id_berikut = id_berikut + 1
                     print("Data berhasil ditambahkan!")
                 else:
                     print("Kualitas harus angka 1 sampai 5.")
@@ -139,22 +147,23 @@ while True:
                 total = 0
                 jumlah = 0
 
-                for d in data_tidur:
-                    if login[2] == "admin" or d[0] == login[0]:
-                        mulai = int(d[2][:2]) * 60 + int(d[2][3:])
-                        akhir = int(d[3][:2]) * 60 + int(d[3][3:])
+                for i in data_tidur:
+                    d = data_tidur[i]
+                    if role == "admin" or d["pemilik"] == login:
+                        mulai = int(d["tidur"][:2]) * 60 + int(d["tidur"][3:])
+                        akhir = int(d["bangun"][:2]) * 60 + int(d["bangun"][3:])
                         durasi = akhir - mulai
 
                         if durasi <= 0:
                             durasi = durasi + 1440
 
-                        print("\nTanggal:", d[1])
-                        print("Pemilik:", d[0])
-                        print("Jam tidur:", d[2])
-                        print("Jam bangun:", d[3])
+                        print("\nTanggal:", d["tanggal"])
+                        print("Pemilik:", d["pemilik"])
+                        print("Jam tidur:", d["tidur"])
+                        print("Jam bangun:", d["bangun"])
                         print("Durasi:", durasi // 60, "jam",
                               durasi % 60, "menit")
-                        print("Kualitas:", d[4], "/5")
+                        print("Kualitas:", d["kualitas"], "/5")
 
                         total = total + durasi
                         jumlah = jumlah + 1
@@ -172,9 +181,9 @@ while True:
             elif menu == "3":
                 tampil = []
 
-                for i in range(len(data_tidur)):
+                for i in data_tidur:
                     d = data_tidur[i]
-                    if login[2] == "admin" or d[0] == login[0]:
+                    if role == "admin" or d["pemilik"] == login:
                         tampil.append(i)
 
                 if len(tampil) == 0:
@@ -184,8 +193,8 @@ while True:
 
                 for no in range(len(tampil)):
                     d = data_tidur[tampil[no]]
-                    print(no + 1, d[0], d[1], d[2], d[3],
-                          "Kualitas:", d[4])
+                    print(no + 1, d["pemilik"], d["tanggal"], d["tidur"], d["bangun"],
+                          "Kualitas:", d["kualitas"])
 
                 pilih_data = input("Nomor data yang diubah: ")
 
@@ -205,37 +214,37 @@ while True:
                 salah = False
 
                 if tidur != "":
-                    if (len(tidur) == 5 and tidur[2] == ":"
-                        and tidur[:2].isdigit()
-                        and tidur[3:].isdigit()
-                        and int(tidur[:2]) < 24
-                        and int(tidur[3:]) < 60):
-                        d[2] = tidur
-                    else:
+                    if not (len(tidur) == 5 and tidur[2] == ":"
+                            and tidur[:2].isdigit()
+                            and tidur[3:].isdigit()
+                            and int(tidur[:2]) < 24
+                            and int(tidur[3:]) < 60):
                         print("Jam tidur tidak valid!")
                         salah = True
 
                 if bangun != "":
-                    if (len(bangun) == 5 and bangun[2] == ":"
-                        and bangun[:2].isdigit()
-                        and bangun[3:].isdigit()
-                        and int(bangun[:2]) < 24
-                        and int(bangun[3:]) < 60):
-                        d[3] = bangun
-                    else:
+                    if not (len(bangun) == 5 and bangun[2] == ":"
+                            and bangun[:2].isdigit()
+                            and bangun[3:].isdigit()
+                            and int(bangun[:2]) < 24
+                            and int(bangun[3:]) < 60):
                         print("Jam bangun tidak valid!")
                         salah = True
 
                 if kualitas != "":
-                    if kualitas.isdigit() and 1 <= int(kualitas) <= 5:
-                        d[4] = int(kualitas)
-                    else:
+                    if not (kualitas.isdigit() and 1 <= int(kualitas) <= 5):
                         print("Kualitas harus angka 1 sampai 5.")
                         salah = True
 
                 if salah:
                     print("Ada input yang tidak valid, data tidak diubah.")
                 else:
+                    if tidur != "":
+                        d["tidur"] = tidur
+                    if bangun != "":
+                        d["bangun"] = bangun
+                    if kualitas != "":
+                        d["kualitas"] = int(kualitas)
                     print("Data berhasil diubah!")
 
                 input("Tekan Enter untuk lanjut.")
@@ -244,9 +253,9 @@ while True:
             elif menu == "4":
                 tampil = []
 
-                for i in range(len(data_tidur)):
+                for i in data_tidur:
                     d = data_tidur[i]
-                    if login[2] == "admin" or d[0] == login[0]:
+                    if role == "admin" or d["pemilik"] == login:
                         tampil.append(i)
 
                 if len(tampil) == 0:
@@ -256,8 +265,8 @@ while True:
 
                 for no in range(len(tampil)):
                     d = data_tidur[tampil[no]]
-                    print(no + 1, d[0], d[1], d[2], d[3],
-                          "Kualitas:", d[4])
+                    print(no + 1, d["pemilik"], d["tanggal"], d["tidur"], d["bangun"],
+                          "Kualitas:", d["kualitas"])
 
                 pilih_data = input("Nomor data yang dihapus: ")
 
@@ -277,9 +286,9 @@ while True:
                 input("Tekan Enter untuk lanjut.")
 
             # MENU ADMIN
-            elif menu == "5" and login[2] == "admin":
+            elif menu == "5" and role == "admin":
                 for a in akun:
-                    print(a[0], "-", a[2])
+                    print(a, "-", akun[a]["role"])
 
                 input("Tekan Enter untuk lanjut.")
 
