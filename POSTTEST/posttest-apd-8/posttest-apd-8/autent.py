@@ -5,8 +5,7 @@ from tampilan import sukses, gagal, jeda
 
 def register():
     username = input("Username baru: ")
-    password = pwinput.pwinput("Password0
-     baru: ")
+    password = pwinput.pwinput("Password baru: ")
 
     ada = username in akun
 
@@ -36,4 +35,4 @@ def login():
 
     gagal("Username atau password salah!")
     jeda()
-    return None 
+    return None
